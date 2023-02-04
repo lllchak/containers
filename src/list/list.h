@@ -7,6 +7,7 @@ namespace s21 {
 
 template <class value_type>
 class list {
+    using reference = value_type&;
     using const_referece = const value_type&;
     using size_type = std::size_t;
 
