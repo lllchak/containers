@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <limits>
+#include <iostream>
 
 namespace s21 {
 
@@ -23,6 +24,27 @@ class list {
         // list(const list& other);
         // list(list&& other);
         // ~list();
+
+        friend std::ostream& operator<<(std::ostream& stream, const list<value_type>& head);
+
+        void push_back(const_reference data) {
+            if (this->size_ >= this->max_size() - 1) {
+                throw std::out_of_range("Container if full");
+            }
+
+            ListNode* new_node = new ListNode(data);
+            if (!this->curr_node_) {
+                this->curr_node_ = new_node;
+                this->size_ = 1;
+            }
+            else {
+                ListNode* tmp = this->curr_node_;
+                tmp->next_ = new_node;
+                new_node->next_ = nullptr;
+                new_node->prev_ = tmp;
+                this->size_++;
+            }
+        }
 
         bool empty() const noexcept {
             return (
