@@ -3,7 +3,7 @@
 
 #define S21_NOEXCEPT throw()
 
-namespace S21 {
+namespace s21 {
 
     template<class T>
     class AVLNode {
