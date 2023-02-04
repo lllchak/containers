@@ -2,13 +2,14 @@
 #define SRC_LIST_LIST_H_
 
 #include <stdexcept>
+#include <limits>
 
 namespace s21 {
 
 template <class value_type>
 class list {
     using reference = value_type&;
-    using const_referece = const value_type&;
+    using const_reference = const value_type&;
     using size_type = std::size_t;
 
     public:
@@ -30,6 +31,9 @@ class list {
             );
         }
         size_type size() const noexcept { return this->size_; }
+        size_type max_size() const noexcept { 
+            return std::numeric_limits<size_type>::max() / sizeof(ListNode); 
+        }
 
     private:
         struct ListNode {
@@ -37,7 +41,7 @@ class list {
             ListNode* prev_;
             ListNode* next_;
             ListNode() : data_(), prev_(nullptr), next_(nullptr) {}
-            ListNode(const T& value) : data_(value), prev_(nullptr), next_(nullptr) {}
+            ListNode(const_reference value) : data_(value), prev_(nullptr), next_(nullptr) {}
         };
 
         size_type size_;
