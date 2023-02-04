@@ -3,7 +3,7 @@ CFLAGS = -Wall -Wextra
 TEST_DIR=tests
 BUILD_DIR=build
 
-SRC  := *.cpp list/*.cpp
+SRC  := list/*.cpp
 OBJS := $(SRC:%.cpp=$(BUILD_DIR)/%.o)
 
 all: clean s21_containers.a
@@ -45,6 +45,6 @@ leaks: clean
 	rm tests_res
 
 debug:
-	$(CC) $(CFLAGS) $(SRC)
+	$(CC) $(CFLAGS) test.cpp $(SRC)
 	./a.out
 	rm a.out
