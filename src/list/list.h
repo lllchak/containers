@@ -5,10 +5,11 @@
 
 namespace s21 {
 
-using lsize = std::size_t;
-
-template <class T>
+template <class value_type>
 class list {
+    using const_referece = const value_type&;
+    using size_type = std::size_t;
+
     public:
         list() {
             this->curr_node_ = new ListNode();
@@ -16,7 +17,7 @@ class list {
             this->curr_node_->prev_ = nullptr;
             this->size_ = 0;
         }
-        // list(const size lsize);
+        // list(const size size_type);
         // list(const list& other);
         // list(list&& other);
         // ~list();
@@ -27,18 +28,18 @@ class list {
                 this->curr_node_->prev_ == nullptr
             );
         }
-        lsize size() const noexcept { return this->size_; }
+        size_type size() const noexcept { return this->size_; }
 
     private:
         struct ListNode {
-            T data_;
+            value_type data_;
             ListNode* prev_;
             ListNode* next_;
             ListNode() : data_(), prev_(nullptr), next_(nullptr) {}
             ListNode(const T& value) : data_(value), prev_(nullptr), next_(nullptr) {}
         };
 
-        lsize size_;
+        size_type size_;
         ListNode* curr_node_;
 };
 
