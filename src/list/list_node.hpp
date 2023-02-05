@@ -18,7 +18,7 @@ class ListNode {
         ListNode() : data_(), prev_(nullptr), next_(nullptr) {}
         explicit ListNode(value_type value) : data_(value), prev_(nullptr), next_(nullptr) {}
         ListNode(const_reference src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
-        virtual ~ListNode() {}
+        ~ListNode() {}
 
         ListNode& operator=(const_reference src) noexcept {
             data_ = src.data_;

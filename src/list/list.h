@@ -6,9 +6,10 @@
 #include <iostream>
 
 #include "list_node.hpp"
+#include "list_iterator.hpp"
 
 namespace s21 {
-
+    
 template <class T>
 class list {
     public:
@@ -16,13 +17,22 @@ class list {
         using reference = T&;
         using const_reference = const T&;
         using size_type = std::size_t;
+
+    public:
+        using iterator = ListIterator<ListNode<value_type>, value_type>;
+        using const_iterator = ListIterator<const ListNode<value_type>, const value_type>;
     
     public:
         list() : head_(nullptr), size_(0) {}
         // list(const size size_type);
         // list(const list& other);
         // list(list&& other);
-        // ~list();
+        ~list() { this->clear(); }
+
+        list<value_type>& operator=(list<value_type>& src) {
+            size_ = src.size_;
+            std::copy(src.begin(), src.end(), (*this).begin());
+        }
 
         friend std::ostream& operator<<(std::ostream& stream, const list<value_type>& head) {
             if (head.empty()) {
@@ -51,6 +61,11 @@ class list {
         }
 
     public:
+        s21::ListNode<value_type>* begin() { return head_; }
+        s21::ListNode<value_type>* begin() const { return head_; }
+        s21::ListNode<value_type>* end() { return nullptr; }
+        s21::ListNode<value_type>* end() const { return nullptr; }
+
         void push_front(const_reference data) {
             s21::ListNode<value_type>* new_node = new s21::ListNode(data);
             if (!head_) head_ = tail_ = new_node;
@@ -85,6 +100,19 @@ class list {
         s21::ListNode<value_type>* head_;
         s21::ListNode<value_type>* tail_;
         size_type size_;
+
+    private:
+        void clear() {
+            ListNode<value_type>* tmp = head_;
+            while (tmp) {
+                ListNode<value_type>* next = tmp->next_;
+                delete tmp;
+                tmp = next;
+            }
+
+            head_ = nullptr;
+        }
+
 };
 
 }  // namespace s21
