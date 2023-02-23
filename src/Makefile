@@ -45,6 +45,6 @@ leaks: clean
 	rm tests_res
 
 debug:
-	$(CC) $(CFLAGS) test.cpp $(SRC)
+	$(CC) $(CFLAGS) test.cpp
 	./a.out
 	rm a.out
