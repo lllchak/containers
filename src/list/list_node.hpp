@@ -24,6 +24,8 @@ class ListNode {
             data_ = src.data_;
             prev_ = src.prev_;
             next_ = src.next_;
+
+            return *this;
         }
 };
 
