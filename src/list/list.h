@@ -9,7 +9,7 @@
 #include "list_iterator.hpp"
 
 namespace s21 {
-    
+
 template <class T>
 class list {
     public:
@@ -23,15 +23,15 @@ class list {
         using const_iterator = ListIterator<const ListNode<value_type>, const value_type>;
     
     public:
-        list() : head_(nullptr), size_(0) {}
-        // list(const size size_type);
-        // list(const list& other);
-        // list(list&& other);
-        ~list() { this->clear(); }
+        list() {}
+        ~list() { clear(); }
 
-        list<value_type>& operator=(list<value_type>& src) {
+        list<value_type>& operator=(list<value_type> src) {
             size_ = src.size_;
-            std::copy(src.begin(), src.end(), (*this).begin());
+            std::swap(head_, src.head_);
+            std::swap(tail_, src.tail_);
+
+            return *this;
         }
 
         friend std::ostream& operator<<(std::ostream& stream, const list<value_type>& head) {
@@ -40,34 +40,34 @@ class list {
                 return stream;
             }
             
-            ListNode<value_type>* tmp = head.head_;
-            stream << "NULL <-> " << tmp->data_ << " <-> ";
-            tmp = tmp->next_;
+            ListNode<value_type>* curr = head.head_;
+            stream << "NULL <-> " << curr->data_ << " <-> ";
+            curr = curr->next_;
 
-            while (tmp && tmp->next_) {
-                if (tmp->prev_->next_->data_ == tmp->next_->prev_->data_) {
-                    stream << tmp->data_ << " <-> ";
+            while (curr && curr->next_) {
+                if (curr->prev_->next_->data_ == curr->next_->prev_->data_) {
+                    stream << curr->data_ << " <-> ";
                 } else {
                     stream << "Invalid list";
                     return stream;
                 }
-                tmp = tmp->next_;
+                curr = curr->next_;
             }
 
-            if (tmp) stream << tmp->data_ << " <-> ";
+            if (curr) stream << curr->data_ << " <-> ";
             stream << "NULL" << std::endl;
 
             return stream;
         }
 
     public:
-        s21::ListNode<value_type>* begin() { return head_; }
-        s21::ListNode<value_type>* begin() const { return head_; }
-        s21::ListNode<value_type>* end() { return nullptr; }
-        s21::ListNode<value_type>* end() const { return nullptr; }
+        ListNode<value_type>* begin() { return head_; }
+        ListNode<value_type>* begin() const { return head_; }
+        ListNode<value_type>* end() { return nullptr; }
+        ListNode<value_type>* end() const { return nullptr; }
 
         void push_front(const_reference data) {
-            s21::ListNode<value_type>* new_node = new s21::ListNode(data);
+            ListNode<value_type>* new_node = new ListNode(data);
             if (!head_) head_ = tail_ = new_node;
             else {
                 new_node->next_ = head_;
@@ -79,7 +79,7 @@ class list {
         }
 
         void push_back(const_reference data) {
-            s21::ListNode<value_type>* new_node = new s21::ListNode(data);
+            ListNode<value_type>* new_node = new ListNode(data);
             if (!head_) head_ = tail_ = new_node;
             else {
                 tail_->next_ = new_node;
@@ -90,27 +90,22 @@ class list {
             size_++;
         }
 
-        bool empty() const noexcept { return (size_ == 0); }
+        bool empty() const noexcept { return (!size_); }
         size_type size() const noexcept { return size_; }
-        // size_type max_size() const noexcept { 
-        //     return std::numeric_limits<size_type>::max() / sizeof(s21::ListNode); 
-        // }
 
     private:
-        s21::ListNode<value_type>* head_;
-        s21::ListNode<value_type>* tail_;
-        size_type size_;
+        ListNode<value_type>* head_ = nullptr;
+        ListNode<value_type>* tail_ = nullptr;
+        size_type size_ = 0;
 
     private:
         void clear() {
-            ListNode<value_type>* tmp = head_;
-            while (tmp) {
-                ListNode<value_type>* next = tmp->next_;
-                delete tmp;
-                tmp = next;
+            ListNode<value_type>* curr = head_;
+            while (curr) {
+                ListNode<value_type>* next = curr->next_;
+                delete curr;
+                curr = next;
             }
-
-            head_ = nullptr;
         }
 
 };
