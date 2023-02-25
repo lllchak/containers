@@ -40,16 +40,16 @@ public:
     using size_type = std::size_t;
 
 private:
-    ListNode<T>* head_ = nullptr;
-    ListNode<T>* tail_ = nullptr;
+    ListNode<value_type>* head_ = nullptr;
+    ListNode<value_type>* tail_ = nullptr;
     size_type size_ = 0;
 
 public:
     list() = default;
     ~list() { clear(); }
 
-    ListNode<T>* get_head(void) const { return head_; }
-    ListNode<T>* get_tail(void) const { return tail_; }
+    ListNode<value_type>* get_head(void) const { return head_; }
+    ListNode<value_type>* get_tail(void) const { return tail_; }
 
     list<value_type>& operator=(list<value_type> src) {
         size_ = src.size_;
@@ -60,9 +60,8 @@ public:
     }
 
 public:
-
     void push_front(const_reference data) {
-        ListNode<T>* new_node = new ListNode(data);
+        ListNode<value_type>* new_node = new ListNode(data);
         if (!head_) head_ = tail_ = new_node;
         else {
             new_node->next_ = head_;
@@ -74,7 +73,7 @@ public:
     }
 
     void push_back(const_reference data) {
-        ListNode<T>* new_node = new ListNode(data);
+        ListNode<value_type>* new_node = new ListNode(data);
         if (!head_) head_ = tail_ = new_node;
         else {
             tail_->next_ = new_node;
@@ -90,9 +89,9 @@ public:
 
 private:
     void clear() {
-        ListNode<T>* curr = head_;
+        ListNode<value_type>* curr = head_;
         while (curr) {
-            ListNode<T>* next = curr->next_;
+            ListNode<value_type>* next = curr->next_;
             delete curr;
             curr = next;
         }
