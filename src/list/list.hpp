@@ -16,10 +16,8 @@ public:
     ListNode* next_ = nullptr;
 
 public:
-    ListNode() = default;
-    ListNode(const T& value) : data_(value), prev_(nullptr), next_(nullptr) {}
-    ListNode(const ListNode& src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
-    ~ListNode() = default;
+    bool operator==(const ListNode& other) { return data_ == other.data_; }
+    bool operator!=(const ListNode& other) { return !(*this == other); }
 
     ListNode& operator=(const ListNode& src) noexcept {
         data_ = src.data_;
@@ -28,16 +26,40 @@ public:
 
         return *this;
     }
+
+    ListNode() = default;
+    ListNode(const T& value) : data_(value), prev_(nullptr), next_(nullptr) {}
+    ListNode(const ListNode& src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
+    ~ListNode() = default;
+
 };
 
 template <typename T>
 class list {
+
+private:
+    class ListIterator {
+    private:
+        ListNode<T>* node_;
+
+    public:
+        ListIterator(ListNode<T>* src) : node_(src) {}
+    public:
+        bool operator==(const ListIterator& other) { return node_ == other.node_; }
+        bool operator!=(const ListIterator& other) { return !(node_ == other.node_); }
+        T& operator*() const { return node_->data_; }
+        T* operator->() const { return &node_->data_; }
+
+        ListIterator& operator++() { node_ = node_->next_; return *this; }
+        ListIterator operator++(int) { ListIterator res(*this); ++(*this); return res; }
+    };
 
 public:
     using value_type = T;
     using reference = T&;
     using const_reference = const T&;
     using size_type = std::size_t;
+    using iterator = ListIterator;
 
 private:
     ListNode<value_type>* head_ = nullptr;
@@ -48,11 +70,14 @@ public:
     list() = default;
     ~list() { clear(); }
 
+    iterator begin() { return head_; }
+    iterator end() { return tail_->next_; }
+
     ListNode<value_type>* get_head(void) const { return head_; }
     ListNode<value_type>* get_tail(void) const { return tail_; }
 
-    list<value_type>& operator=(list<value_type> src) {
-        size_ = src.size_;
+    list<value_type>& operator=(list<value_type>& src) {
+        std::swap(size_, src.size_);
         std::swap(head_, src.head_);
         std::swap(tail_, src.tail_);
 
@@ -96,7 +121,6 @@ private:
             curr = next;
         }
     }
-
 };
 
 
