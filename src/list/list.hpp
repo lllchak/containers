@@ -28,7 +28,7 @@ public:
     }
 
     ListNode() = default;
-    ListNode(const T& value) : data_(value), prev_(nullptr), next_(nullptr) {}
+    ListNode(const T& value)      : data_(value), prev_(nullptr), next_(nullptr) {}
     ListNode(const ListNode& src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
     ~ListNode() = default;
 
@@ -43,7 +43,9 @@ private:
         ListNode<T>* node_;
 
     public:
+        ListIterator()                 : node_(nullptr) {}
         ListIterator(ListNode<T>* src) : node_(src) {}
+
     public:
         bool operator==(const ListIterator& other) { return node_ == other.node_; }
         bool operator!=(const ListIterator& other) { return !(node_ == other.node_); }
@@ -52,6 +54,8 @@ private:
 
         ListIterator& operator++() { node_ = node_->next_; return *this; }
         ListIterator operator++(int) { ListIterator res(*this); ++(*this); return res; }
+        ListIterator& operator--() { node_ = node_->prev_; return *this; }
+        ListIterator operator--(int) { ListIterator res(*this); --(*this); return res; }
     };
 
 public:
@@ -71,7 +75,7 @@ public:
     ~list() { clear(); }
 
     iterator begin() { return head_; }
-    iterator end() { return tail_->next_; }
+    iterator end() { return nullptr; }
 
     ListNode<value_type>* get_head(void) const { return head_; }
     ListNode<value_type>* get_tail(void) const { return tail_; }
