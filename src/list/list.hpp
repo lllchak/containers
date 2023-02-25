@@ -11,7 +11,11 @@ namespace s21 {
 template <typename T>
 class ListNode {
 public:
-    T data_;
+    using value_type = T;
+    using const_refernce = const T&;
+
+public:
+    value_type data_;
     ListNode* prev_ = nullptr;
     ListNode* next_ = nullptr;
 
@@ -28,50 +32,64 @@ public:
     }
 
     ListNode() = default;
-    ListNode(const T& value)      : data_(value), prev_(nullptr), next_(nullptr) {}
+    ListNode(const_refernce value)      : data_(value), prev_(nullptr), next_(nullptr) {}
     ListNode(const ListNode& src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
     ~ListNode() = default;
 
 };
 
 template <typename T>
-class list {
+class ListIterator {
+public:
+    using value_type = T;
+
+public:
+    ListIterator() {}
+    ListIterator(ListNode<value_type>* src) : node_(src) {}
+
+public:
+    bool operator==(const ListIterator& other) { return node_ == other.node_; }
+    bool operator!=(const ListIterator& other) { return !(node_ == other.node_); }
+    T& operator*() const { return node_->data_; }
+    T* operator->() const { return &node_->data_; }
+
+    ListIterator& operator++() { 
+        node_ = node_->next_; 
+        return *this; 
+    }
+
+    ListIterator operator++(int) { 
+        ListIterator res(*this);
+        ++(*this); 
+        return res;
+    }
+
+    ListIterator& operator--() { 
+        node_ = node_->prev_;
+        return *this;
+    }
+
+    ListIterator operator--(int) { 
+        ListIterator res(*this); 
+        --(*this); 
+        return res; 
+    }
 
 private:
-    class ListIterator {
-    private:
-        ListNode<T>* node_;
+    ListNode<value_type>* node_ = nullptr;
+};
 
-    public:
-        ListIterator()                 : node_(nullptr) {}
-        ListIterator(ListNode<T>* src) : node_(src) {}
-
-    public:
-        bool operator==(const ListIterator& other) { return node_ == other.node_; }
-        bool operator!=(const ListIterator& other) { return !(node_ == other.node_); }
-        T& operator*() const { return node_->data_; }
-        T* operator->() const { return &node_->data_; }
-
-        ListIterator& operator++() { node_ = node_->next_; return *this; }
-        ListIterator operator++(int) { ListIterator res(*this); ++(*this); return res; }
-        ListIterator& operator--() { node_ = node_->prev_; return *this; }
-        ListIterator operator--(int) { ListIterator res(*this); --(*this); return res; }
-    };
-
+template <typename T>
+class list {
 public:
     using value_type = T;
     using reference = T&;
     using const_reference = const T&;
     using size_type = std::size_t;
-    using iterator = ListIterator;
-
-private:
-    ListNode<value_type>* head_ = nullptr;
-    ListNode<value_type>* tail_ = nullptr;
-    size_type size_ = 0;
+    using iterator = ListIterator<T>;
 
 public:
-    list() = default;
+    list() {};
     ~list() { clear(); }
 
     iterator begin() { return head_; }
@@ -115,6 +133,11 @@ public:
 
     bool empty() const noexcept { return (!size_); }
     size_type size() const noexcept { return size_; }
+
+private:
+    ListNode<value_type>* head_ = nullptr;
+    ListNode<value_type>* tail_ = nullptr;
+    size_type size_ = 0;
 
 private:
     void clear() {
