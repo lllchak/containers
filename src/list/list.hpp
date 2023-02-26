@@ -76,7 +76,7 @@ public:
 
 public:
     list() { init_dummy(); }
-    list(std::initializer_list<T>& src);
+    list(const std::initializer_list<T>& src);
     ~list() {}
 
     iterator begin() const { return iterator(dummy_->next_); }
@@ -129,6 +129,11 @@ private:
     size_type size_ = 0;
 };
 
+template <typename T>
+list<T>::list(const std::initializer_list<T>& src) {
+    init_dummy();
+    for (auto it = src.begin(); it != src.end(); ++it) push_back(*it);
+}
 
 }  // namespace s21
 
