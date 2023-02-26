@@ -78,14 +78,17 @@ public:
     list() { init_dummy(); }
     list(const size_type n);
     list(const std::initializer_list<T>& src);
-    ~list() {}
+    list(const list<T>& src);
+    list(list<T>&& src) { init_dummy(); std::move(src); }
+    ~list() { clear(); }
 
     iterator begin() const { return iterator(dummy_->next_); }
     iterator end() const { return iterator(dummy_); }
 
     ListNode<value_type>* get_head(void) const { return dummy_->next_; }
 
-    list<value_type>& operator=(list<value_type>& src) {
+    list<value_type>& operator=(const list<value_type>& src);
+    list<value_type>& operator=(list<value_type>&& src) {
         std::swap(size_, src.size_);
         std::swap(dummy_, src.dummy_);
 
@@ -131,6 +134,16 @@ private:
 };
 
 template <typename T>
+list<T>& list<T>::operator=(const list<T>& src) {
+    if (this == &src) return *this;
+
+    this->clear();
+    for (auto it = src.begin(); it != src.end(); ++it) push_back(*it);
+
+    return *this;
+}
+
+template <typename T>
 list<T>::list(const size_type n) {
     init_dummy();
     for (int _ = n; _ > 0; --_) push_back(0);
@@ -138,6 +151,12 @@ list<T>::list(const size_type n) {
 
 template <typename T>
 list<T>::list(const std::initializer_list<T>& src) {
+    init_dummy();
+    for (auto it = src.begin(); it != src.end(); ++it) push_back(*it);
+}
+
+template <typename T>
+list<T>::list(const list<T>& src) {
     init_dummy();
     for (auto it = src.begin(); it != src.end(); ++it) push_back(*it);
 }
