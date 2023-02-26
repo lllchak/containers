@@ -56,27 +56,10 @@ public:
     T& operator*() const { return node_->data_; }
     T* operator->() const { return &node_->data_; }
 
-    ListIterator& operator++() { 
-        node_ = node_->next_; 
-        return *this; 
-    }
-
-    ListIterator operator++(int) { 
-        ListIterator res(*this);
-        ++(*this); 
-        return res;
-    }
-
-    ListIterator& operator--() { 
-        node_ = node_->prev_;
-        return *this;
-    }
-
-    ListIterator operator--(int) { 
-        ListIterator res(*this); 
-        --(*this); 
-        return res; 
-    }
+    ListIterator& operator++() { node_ = node_->next_; return *this; }
+    ListIterator operator++(int) { ListIterator res(*this); ++(*this); return res; }
+    ListIterator& operator--() { node_ = node_->prev_; return *this; }
+    ListIterator operator--(int) { ListIterator res(*this); --(*this); return res; }
 
 private:
     ListNode<value_type>* node_;
