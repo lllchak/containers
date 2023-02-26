@@ -71,11 +71,12 @@ public:
     using value_type = T;
     using reference = T&;
     using const_reference = const T&;
-    using size_type = std::size_t;
+    using size_type = size_t;
     using iterator = ListIterator<T>;
 
 public:
     list() { init_dummy(); }
+    list(const size_type n);
     list(const std::initializer_list<T>& src);
     ~list() {}
 
@@ -128,6 +129,12 @@ private:
     ListNode<value_type>* dummy_;
     size_type size_ = 0;
 };
+
+template <typename T>
+list<T>::list(const size_type n) {
+    init_dummy();
+    for (int _ = n; _ > 0; --_) push_back(0);
+}
 
 template <typename T>
 list<T>::list(const std::initializer_list<T>& src) {
