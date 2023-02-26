@@ -48,3 +48,14 @@ debug:
 	$(CC) $(CFLAGS) test.cpp
 	./a.out
 	rm a.out
+
+debug-leaks: clean
+	$(CC) $(CFLAGS) test.cpp -lgtest -o tests_res
+
+	valgrind --leak-check=full \
+         	 --show-leak-kinds=all \
+         	 --track-origins=yes \
+         	 --verbose \
+         	 ./tests_res
+
+	rm tests_res
