@@ -113,17 +113,20 @@ public:
     size_type size() const noexcept { return size_; }
 
 private:
-    void clear() {        
-        for (iterator _ = this->begin(); _ != this->end(); ++_) {
-            ListNode<value_type>* tmp = dummy_->prev_;
-            dummy_->prev_ = dummy_->prev_->prev_;
-            dummy_->prev_->next_ = dummy_;
-            delete tmp;
+    void clear() { 
+        if (!dummy_) return;
+
+        ListNode<value_type>* curr = dummy_->next_;
+        while (iterator(curr) != this->end()) {
+            ListNode<value_type>* next = curr->next_;
+            delete curr;
+            curr = next;
         }
+        delete curr;
     }
 
     void init_dummy() {
-        dummy_ = new ListNode<value_type>();
+        dummy_ = new ListNode<value_type>(0);
         dummy_->prev_ = dummy_;
         dummy_->next_ = dummy_;
     }
