@@ -31,10 +31,10 @@ public:
         return *this;
     }
 
-    ListNode() = default;
+    ListNode() {};
     ListNode(const_refernce value)      : data_(value), prev_(nullptr), next_(nullptr) {}
     ListNode(const ListNode& src) : data_(src.data_), prev_(src.prev_), next_(src.next_) {}
-    ~ListNode() = default;
+    ~ListNode() {};
 
 };
 
